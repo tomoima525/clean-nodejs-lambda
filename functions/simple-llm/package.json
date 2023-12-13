@@ -3,5 +3,6 @@
   "packageManager": "yarn@3.2.1",
   "dependencies": {
     "langchain": "^0.0.206"
-  }
+  },
+  "type": "module"
 }
