@@ -1,11 +1,26 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import {
+  Aws,
+  Duration,
+  Stack,
+  StackProps,
+  aws_lambda_nodejs as lambda_nodejs,
+  aws_lambda as lambda,
+} from "aws-cdk-lib";
 import { Construct } from "constructs";
+import * as path from "path";
 
 export class DevelopmentTemplateStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
-    // Reference your resouces
-    // See how to reference external resources https://docs.aws.amazon.com/cdk/v2/guide/resources.html
-    // const s3 = s3.Bucket.fromBucketArn(this, 'MyBucket', 'arn:aws:s3:::my-bucket-name');
+    const llmLambea = new lambda_nodejs.NodejsFunction(this, "simple-llm", {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "handler",
+      entry: path.join(`${__dirname}/../`, "functions", "simple-llm/index.ts"),
+      environment: {
+        OPENAI_API_KEY: "openai-api-key",
+      },
+      memorySize: 256,
+      timeout: Duration.seconds(120),
+    });
   }
 }
